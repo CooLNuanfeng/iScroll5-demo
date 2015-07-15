@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+	<link rel="stylesheet" href="style/common.css">
+</head>
+<body>
+	<header>iScroll</header>
+	<div id="navWrapp" class="navBox">
+		<nav id="navScroller">
+			<ul>
+				<li><a href="">News1</a></li>
+				<li><a href="">News2</a></li>
+				<li><a href="">News3</a></li>
+				<li><a href="">News4</a></li>
+				<li><a href="">News5</a></li>
+				<li><a href="">News6</a></li>
+				<li><a href="">News7</a></li>
+				<li><a href="">News8</a></li>
+				<li><a href="">News9</a></li>
+				<li><a href="">News10</a></li>
+			</ul>
+		</nav>
+	</div>
+	<section id="wrapper" class="container">
+		<div id="scroller" class="wrap">
+			<div class="pulldown">
+	          <span class="icon"></span><span class="label">下拉刷新...</span>
+	        </div>
+			<ul>
+				<li class="item">item1 start</li>
+				<li id="btn" class="item">item1 btn</li>
+				<li id="zepto" class="item">item1 zepto</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1 last</li>
+			</ul>
+			<div class="pullup">
+	          <span class="icon"></span><span class="label">上拉刷新...</span>
+	        </div>
+		</div>
+	</section>
+	<footer>footer</footer>
+</body>
+<script type="text/javascript" src="js/iscroll-probe.js"></script>
+<script src="js/zepto.min.js"></script>
+<script type="text/javascript">
+	var len = $('#navScroller li').length;
+	$('#navScroller').width(len*80);
+	var navScroll = new IScroll('#navWrapp',{
+		eventPassthrough: true, 
+		scrollX: true, 
+		scrollY: false, 
+		preventDefault: false
+	});
+	
+	var myScroll = new IScroll('#wrapper',{
+		probeType: 1,  //该值用于监听 scroll 事件，表示敏感程度 分别为 1,2,3级，最高3级，只有设置了 该值，scroll 事件才起作用 并且引用的是 iscroll-probe.js
+		tap: 'myCustomTapEvent',//绑定自定义事件
+		scrollbars: true,  // 设置为true时，开始对滚动条进行设置
+		fadeScrollbars : true, //
+		//snap: 'li'
+		//startY : -50 //利用布局实现偏移
+	});
+	
+	myScroll.on('scroll',function(){
+		console.log('move');
+		console.log('y:',this.y,'maxScrollY:',this.maxScrollY);
+		var $wrapper = $(this.wrapper);
+		var $pullDown = $wrapper.find('.pulldown');
+		var $pullUp = $wrapper.find('.pullup');
+		if(this.y>50){
+			$pullDown.addClass('flip').find('.label').html('松开后刷新...');
+		}else{
+			$pullDown.removeClass('flip').find('.label').html('下拉刷新...');
+		}
+
+		if(this.maxScrollY - this.y > 50){
+			$pullUp.addClass('flip').find('.label').html('松开后刷新...');
+		}else{
+			$pullUp.removeClass('flip').find('.label').html('上拉刷新...');
+		}
+	});
+
+	myScroll.on('scrollEnd',function(){
+		console.log('scrollEnd',this);
+		console.log('y:',this.y,'maxScrollY:',this.maxScrollY);
+		var $wrapper = $(this.wrapper);
+		var $pullDown = $wrapper.find('.pulldown');
+		var $pullUp = $wrapper.find('.pullup');
+		var data = null;
+
+		if($pullDown.hasClass('flip')){
+			$pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
+			$wrapper.css('top',84);
+			getData($wrapper,data,0);  // 0 表示下拉刷新
+		}
+
+		if($pullUp.hasClass('flip')){
+			$pullUp.removeClass('flip').addClass('loading').find('.label').html('加载中...');
+			getData($wrapper,data,1); // 1 表示上拉刷新
+		}
+
+	});
+
+	$('#btn').on('myCustomTapEvent',function(){
+		alert('触发了iScroll中的自定义事件');
+	});
+
+	$('#zepto').on('tap',function(){
+		alert('zepto 的 tap 事件');
+	});
+
+	function getData($obj,data,direction){
+		$.ajax({
+			//url:'http://10.8.211.73/mobile/iScroll/data/iScrollData.php',
+			url:'http://localhost/mobile/iScroll/data/iScrollData.php',
+			type : 'POST',
+			data : data,
+			dataType : 'json',
+			success : function(res){
+				console.log(res);
+				if(!direction){
+					$obj.find('.pulldown').removeClass('loading').find('.label').html('松开后刷新...');
+					$obj.css('top',34);
+					$.each(res,function(index,item){
+						$obj.find('ul').prepend('<li class="item">'+item+'</li>')
+					});
+					myScroll.refresh();
+				}else{
+					$obj.find('.pullup').removeClass('loading').find('.label').html('松开后刷新...');
+					$.each(res,function(index,item){
+						$obj.find('ul').append('<li class="item">'+item+'</li>')
+					});
+					myScroll.refresh();
+				};
+				
+			}
+		})
+	}
+
+</script>
+</html>

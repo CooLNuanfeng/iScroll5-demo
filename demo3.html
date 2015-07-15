@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+	<link rel="stylesheet" href="style/common.css">
+</head>
+<body>
+	<header>iScroll</header>
+	<div id="navWrapp" class="navBox">
+		<nav id="navScroller">
+			<ul>
+				<li><a href="">News1</a></li>
+				<li><a href="">News2</a></li>
+				<li><a href="">News3</a></li>
+				<li><a href="">News4</a></li>
+				<li><a href="">News5</a></li>
+				<li><a href="">News6</a></li>
+				<li><a href="">News7</a></li>
+				<li><a href="">News8</a></li>
+				<li><a href="">News9</a></li>
+				<li><a href="">News10</a></li>
+			</ul>
+		</nav>
+	</div>
+	<section id="wrapper" class="container">
+		<div id="scroller" class="wrap">
+			<ul>
+				<li class="item">item1 start</li>
+				<li id="btn" class="item">item1 btn</li>
+				<li id="zepto" class="item">item1 zepto</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				
+
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1</li>
+				<li class="item">item1 last</li>
+			</ul>
+		</div>
+	</section>
+	<footer>footer</footer>
+</body>
+<script type="text/javascript" src="js/iscroll-probe.js"></script>
+<script src="js/zepto.min.js"></script>
+<script type="text/javascript">
+	var len = $('#navScroller li').length;
+	$('#navScroller').width(len*80);
+	var navScroll = new IScroll('#navWrapp',{
+		eventPassthrough: true, 
+		scrollX: true, 
+		scrollY: false, 
+		preventDefault: false
+	});
+	
+	var myScroll = new IScroll('#wrapper',{
+		tap: 'myCustomTapEvent',//绑定自定义事件
+		scrollbars: true,  // 设置为true时，开始对滚动条进行设置
+		fadeScrollbars : true, //
+		//snap: 'li'
+	});
+	
+
+	$('#btn').on('myCustomTapEvent',function(){
+		alert('触发了iScroll中的自定义事件');
+	});
+
+	$('#zepto').on('tap',function(){
+		alert('zepto 的 tap 事件')
+	})
+
+
+</script>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+	<link rel="stylesheet" href="style/common.css">
+</head>
+<body>
+	<header>iScroll</header>
+	<div id="navWrapp" class="navBox">
+		<nav id="navScroller">
+			<ul>
+				<li><a href="">News1</a></li>
+				<li><a href="">News2</a></li>
+				<li><a href="">News3</a></li>
+				<li><a href="">News4</a></li>
+				<li><a href="">News5</a></li>
+				<li><a href="">News6</a></li>
+				<li><a href="">News7</a></li>
+				<li><a href="">News8</a></li>
+				<li><a href="">News9</a></li>
+				<li><a href="">News10</a></li>
+			</ul>
+		</nav>
+	</div>
+	<footer>footer</footer>
+</body>
+<script type="text/javascript" src="js/iscroll.js"></script>
+<script src="js/zepto.min.js"></script>
+<script type="text/javascript">
+	var myScroll = new IScroll('#navWrapp',{
+		eventPassthrough: true, 
+		scrollX: true, 
+		scrollY: false, 
+		preventDefault: false
+	});
+	//document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+</script>
+</html>
